@@ -46,7 +46,7 @@ public class Movie {
         if (movies==null||movies.length==0){
             return null;
         }
-        ArrayList<Movie> PGMovies = new ArrayList<Movie>(movies.length);
+        ArrayList<Movie> PGMovies = new ArrayList<>(movies.length);
         for (Movie movie:movies)
             if (movie.rating.equals("PG"))
                 PGMovies.add(movie);

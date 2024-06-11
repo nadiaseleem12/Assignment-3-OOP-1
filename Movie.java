@@ -1,11 +1,13 @@
 package oopAssignment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Movie {
-    private String title;
-    private String studio;
-    private String rating;
+    private String title,studio,rating ;
+
 
     public Movie(String title, String studio, String rating) {
         this.title = title;
@@ -42,20 +44,68 @@ public class Movie {
         this.rating = rating;
     }
 
-    public static Movie[] getPG(Movie[] movies){
-        if (movies==null||movies.length==0){
-            return null;
-        }
-        ArrayList<Movie> PGMovies = new ArrayList<>(movies.length);
-        for (Movie movie:movies)
-            if (movie.rating.equals("PG"))
-                PGMovies.add(movie);
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "title='" + title + '\'' +
+                ", studio='" + studio + '\'' +
+                ", rating='" + rating + '\'' +
+                '}';
+    }
 
-        return (Movie[]) PGMovies.toArray();
+    public static Movie[] getPGArray(Movie[] movies){
+        if (movies==null)
+            throw new IllegalArgumentException("input array can't be null");
+
+
+        Movie[] moviesPG = new Movie[movies.length];
+        int j =0;
+        for (int i=0;i<movies.length;i++)
+            if (movies[i].rating.equalsIgnoreCase("PG"))
+                moviesPG[j++] = movies[i];
+
+        return moviesPG;
 
     }
 
+    public static ArrayList<Movie> getPGArrayList(Movie[] movies){
+        if (movies==null)
+            throw new IllegalArgumentException("input array can't be null");
+
+
+        ArrayList<Movie> moviesListPG = new ArrayList<>();
+        for (Movie movie:movies)
+            if (movie.rating.equalsIgnoreCase("PG"))
+                moviesListPG.add(movie);
+
+        return moviesListPG;
+
+    }
+
+    public static List<Movie> getPGList(Movie[] movies){
+        if (movies==null)
+            throw new IllegalArgumentException("input array can't be null");
+
+
+        var moviesListPG = Arrays.stream(movies)
+                .filter(movie -> movie.rating.equalsIgnoreCase("pg"))
+                .collect(Collectors.toList());
+
+        return moviesListPG;
+
+    }
     public static void main(String[] args) {
-        Movie movie = new Movie("“Casino Royal","Eon Productions","PG13");
+        Movie movie1 = new Movie("Casino Royal","Eon Productions","PG");
+        Movie movie2 = new Movie("Casino Royal","Eon Productions","PG13");
+        Movie[] movies = new Movie[]{movie1,movie2,movie2,movie1};
+
+        try {
+            var moviesPG = Movie.getPGList(movies);
+            for (Movie m:moviesPG){
+                System.out.println(m);
+            }
+        }catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
     }
 }
